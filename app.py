@@ -6,7 +6,7 @@ from io import BytesIO
 
 # Import the core well planning module
 try:
-    from well_planner_core import run_well_plan, plot_3d, plot_map
+    from well_planner_core import run_well_plan, plot_3d
 except ImportError:
     st.error("❌ Error: Could not import well_planner_core. Make sure well_planner_core.py is in the repo.")
     st.stop()
@@ -98,7 +98,8 @@ if calculate_btn:
             }
 
             # Run the well planning calculation
-            survey_df, traj, uncertainty_df = run_well_plan(config)
+            # run_well_plan returns (survey_df, traj, uncertainty_df, fig, map_obj)
+            survey_df, traj, uncertainty_df, fig, map_obj = run_well_plan(config)
 
             st.success("✅ Trajectory computed successfully!")
 
@@ -123,21 +124,17 @@ if calculate_btn:
 
             with tab2:
                 st.subheader("Well Trajectory Visualizations")
-                try:
-                    # Plot 3D trajectory
-                    fig_3d = plot_3d(survey_df, traj, units, well_name)
-                    st.pyplot(fig_3d)
-                except Exception as e:
-                    st.info(f"📊 3D plot generation requires additional setup: {str(e)}")
+                if fig is not None:
+                    st.pyplot(fig)
+                else:
+                    st.info("📊 3D plot generation requires matplotlib")
 
             with tab3:
                 st.subheader("Interactive Map")
-                try:
-                    map_obj = plot_map(survey_df, surface_lat, surface_lon, 
-                                     target_lat, target_lon, units, well_name)
-                    st.write("Map generation requires folium setup")
-                except Exception as e:
-                    st.info(f"🗺️ Map generation: {str(e)}")
+                if map_obj is not None:
+                    st.write("Map object ready for integration")
+                else:
+                    st.info("🗺️ Map requires folium setup")
 
             with tab4:
                 st.subheader("Export Data")
