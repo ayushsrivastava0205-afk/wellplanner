@@ -114,11 +114,11 @@ if calculate_btn:
                 # Summary statistics
                 col1, col2, col3, col4 = st.columns(4)
                 with col1:
-                    st.metric("Total MD", f"{survey_df['MD'].max():.1f} {['m','ft'][units=='imperial']}")
+                    st.metric("Total MD", f"{survey_df['MD'].max():.1f} m")
                 with col2:
-                    st.metric("Max Inclination", f"{survey_df['INC'].max():.2f}°")
+                    st.metric("Max Inclination", f"{survey_df['Inc'].max():.2f}°")
                 with col3:
-                    st.metric("Target TVD", f"{target_tvd:.1f} {['m','ft'][units=='imperial']}")
+                    st.metric("Target TVD", f"{target_tvd:.1f} m")
                 with col4:
                     st.metric("Stations", len(survey_df))
 
